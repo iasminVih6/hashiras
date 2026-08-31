@@ -1,0 +1,143 @@
+/* styles.css
+   Um único arquivo de estilo pra tudo. A cor de cada personagem não vem mais
+   de um arquivo CSS diferente — ela é aplicada via uma variável CSS
+   (--cor-tema), que o JavaScript define dinamicamente na página de detalhe.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Varela+Round&display=swap');
+
+:root {
+  --cor-tema: #333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Varela Round', Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+header {
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 25px 15px;
+}
+
+/* Na página de detalhe, o header ganha a cor do tema do personagem */
+body.pagina-personagem header {
+  background-color: var(--cor-tema);
+  border-radius: 0 0 40% 40% / 15%;
+}
+
+header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2em;
+  margin: 0;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+section {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1100px;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+a {
+  text-decoration: none;
+  display: inline-block;
+  color: inherit;
+}
+
+p {
+  font-size: 1.05em;
+  color: #333;
+}
+
+strong {
+  color: #000;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+}
+
+/* ---- Lista de personagens (index.html) ---- */
+
+#personagens {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.personagem-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.personagem-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.personagem-card img {
+  max-width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ---- Página de detalhe do personagem ---- */
+
+.curiosidade {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.curiosidade img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.link-voltar {
+  display: inline-block;
+  margin: 15px 20px 0;
+  color: var(--cor-tema, #333);
+  font-weight: 600;
+}
+
+.carregando,
+.erro {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2em;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}

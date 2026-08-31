@@ -1,0 +1,146 @@
+MUDANÇAS NO PROJETO — HASHIRAS DE DEMON SLAYER
+================================================
+Registro de tudo que foi alterado desde a versão original (páginas soltas)
+até a versão atual (Node.js + Express + SQLite + API).
+
+
+1. IMAGENS
+-----------
+ANTES:
+  - Pasta "imagens/"        -> fotos de perfil dos personagens
+  - Pasta "imagens2/"       -> fotos usadas nas curiosidades
+  - Pasta "img/imagens/"    -> CÓPIA idêntica de "imagens/"
+  - Pasta "img/imagens2/"   -> CÓPIA idêntica de "imagens2/"
+  (76 arquivos no total, sendo metade duplicada)
+
+DEPOIS:
+  - public/img/perfil/         -> fotos de perfil (10 arquivos)
+  - public/img/curiosidades/   -> fotos das curiosidades (28 arquivos)
+  Nenhuma duplicata. Metade do espaço em disco usado antes.
+
+
+2. PÁGINAS HTML
+-----------------
+ANTES:
+  - index.html
+  - rengoku.html, gyomei.html, mitsuri.html, obanai.html, muichiro.html,
+    shinobu.html, sanemi.html, tomioka.html, uzui.html
+    (9 páginas, uma por personagem, com o texto de cada um escrito
+    diretamente no HTML)
+  - Pasta "index2.html/" com cópias antigas/duplicadas dessas 9 páginas
+    (um rascunho que tinha sobrado)
+
+DEPOIS:
+  - public/index.html        -> lista os personagens (busca da API)
+  - public/personagem.html   -> ÚNICA página, usada por todos os
+    personagens. Qual personagem aparece depende do link, por exemplo:
+    personagem.html?id=sanemi
+  A pasta "index2.html/" foi removida (era conteúdo duplicado/desatualizado).
+
+
+3. CSS
+-------
+ANTES:
+  - styles.css (estilo geral)
+  - rengoku.css, gyomei.css, mitsuri.css, obanai.css, muichiro.css,
+    shinobu.css, sanemi.css, tomioka.css, uzui.css
+    (9 arquivos quase idênticos — a única diferença real entre eles
+    era a cor de fundo do header de cada personagem)
+
+DEPOIS:
+  - public/css/styles.css (um arquivo só)
+  A cor de cada personagem agora é aplicada através de uma variável CSS
+  (--cor-tema), que o JavaScript define na hora de montar a página,
+  usando o valor "cor_tema" que vem do banco de dados.
+
+
+4. TEXTOS E DADOS DOS PERSONAGENS
+-----------------------------------
+ANTES:
+  Escritos direto dentro de cada arquivo .html (nome, idade, posto,
+  status, curiosidades, tudo em texto fixo no HTML).
+
+DEPOIS:
+  Guardados no banco de dados SQLite (arquivo db/hashiras.db), em
+  duas tabelas:
+
+  - personagens (id, nome, idade, posto, status, cor_tema, imagem_perfil)
+  - curiosidades (id, personagem_id, imagem, texto, ordem)
+
+  Cada curiosidade está ligada a um personagem pelo campo
+  "personagem_id" (relação 1 personagem : N curiosidades).
+
+
+5. BACKEND E API (NOVO — NÃO EXISTIA ANTES)
+----------------------------------------------
+Criado um servidor com Node.js + Express (arquivo server.js) que:
+
+  a) Serve os arquivos do site (pasta public/)
+  b) Expõe uma API que devolve os dados do banco em JSON:
+
+     GET /api/personagens
+       -> devolve a lista de todos os personagens
+
+     GET /api/personagens/:id
+       -> devolve um personagem específico, já com suas curiosidades
+          (ex: /api/personagens/sanemi)
+
+  O front-end (o que roda no navegador) não lê o banco diretamente —
+  ele pede os dados pra essa API usando fetch(), e monta a página
+  com o que recebe de volta.
+
+
+6. JAVASCRIPT DO FRONT-END (NOVO)
+------------------------------------
+  - public/js/index.js
+      Busca a lista de personagens em /api/personagens e cria um
+      "card" na tela pra cada um, com link pra página de detalhe.
+
+  - public/js/personagem.js
+      Lê o "?id=" da URL (ex: personagem.html?id=uzui), busca esse
+      personagem em /api/personagens/uzui e monta a página com nome,
+      idade, status, cor do tema e todas as curiosidades.
+
+
+7. RESUMO DA ESTRUTURA DE PASTAS
+------------------------------------
+ANTES (tudo solto na raiz):
+  index.html, sanemi.html, rengoku.html, ... (9 arquivos)
+  styles.css, sanemi.css, rengoku.css, ... (9 arquivos)
+  imagens/, imagens2/, img/imagens/, img/imagens2/
+  index2.html/ (pasta com duplicatas)
+
+DEPOIS (organizado por tipo):
+  hashiras-app/
+  ├── server.js              -> backend + API
+  ├── package.json           -> dependências do projeto
+  ├── README.md               -> como instalar e rodar
+  ├── db/
+  │   ├── database.js         -> conecta no banco e cria as tabelas
+  │   ├── seed.js              -> popula o banco com os dados
+  │   └── hashiras.db         -> o banco de dados (gerado ao rodar)
+  └── public/
+      ├── index.html           -> lista de personagens
+      ├── personagem.html      -> página única e dinâmica
+      ├── css/styles.css
+      ├── js/
+      │   ├── index.js
+      │   └── personagem.js
+      └── img/
+          ├── perfil/
+          └── curiosidades/
+
+
+8. PROBLEMAS RESOLVIDOS DURANTE A INSTALAÇÃO
+------------------------------------------------
+  - "db.exec is not a function": o pacote better-sqlite3 não tinha sido
+    instalado corretamente. Resolvido reinstalando as dependências
+    (apagando node_modules e package-lock.json e rodando npm install
+    de novo).
+  - "localhost:3000 abrindo o Grafana": outro programa (Grafana) já
+    estava usando a porta 3000 no computador. Resolvido trocando a
+    porta do projeto para 3001 no server.js.
+  - "Conexão recusada mesmo com o servidor rodando": o terminal onde
+    o npm start tinha sido rodado já tinha voltado ao prompt normal,
+    ou seja, o servidor não estava mais ativo. Resolvido rodando
+    npm start de novo e deixando o terminal aberto.

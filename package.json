@@ -1,0 +1,14 @@
+{
+  "name": "The Hashiras",
+  "version": "2.0.0",
+  "description": "Site sobre os Hashiras de Demon Slayer, fiz esse projeto quando eu estava aprendendo sobre programação, o projeto era apenas com HTML e CSS, comecei a melhorar esse projeto agora que tenho mais conhecimento,organizando melhor as pastas, aplicando banco de dados e API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node db/seed.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "express": "^4.21.0"
+  }
+}
