@@ -1,7 +1,6 @@
-# Hashiras de Demon Slayer — versão com banco de dados e API
+# Hashiras de Demon Slayer
 
-Site sobre os 9 Hashiras de Demon Slayer, com os dados guardados num banco
-de dados e servidos por uma API, em vez de ficarem escritos direto no HTML.
+Site sobre os 9 Hashiras de Demon Slayer
 
 
 ## Estrutura do projeto
